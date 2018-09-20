@@ -1,0 +1,33 @@
+Learning targets:
+- Setting up an in app SQL
+- Making a good vmv
+- import textfile. Json or xml
+Bonus targets
+- Unit Testing.. atleast try.
+- Week planning
+- Changing interface after its done
+- Running on android
+- Share between devices
+
+Functions
+StartScreen
+- Create new shopping list
+- Pick latest shopping list
+- Add to shopping list
+	- Add ingridients
+	- Add recipe
+- choose old shopping lists
+- view recipe
+- add recipe
+- edit recipe
+- add/edit ingridients
+
+views
+- Start
+- Shopping list show
+- Shopping list edit
+- Recipes show
+- Recipe show
+- Recipe edit
+- Ingridients show
+- Ingridients edit
