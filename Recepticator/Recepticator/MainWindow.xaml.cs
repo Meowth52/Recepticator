@@ -37,6 +37,7 @@ namespace Recepticator
 
             // Now lets execute the SQL ;-)
             sqlite_cmd.ExecuteNonQuery();
+            sqlite_cmd.CreateParameter();
         }
     }
 }
