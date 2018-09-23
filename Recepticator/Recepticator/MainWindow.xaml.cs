@@ -33,11 +33,35 @@ namespace Recepticator
             SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
 
             // Let the SQLiteCommand object know our SQL-Query:
-            sqlite_cmd.CommandText = "CREATE TABLE test (id integer primary key, text varchar(100));";
-
-            // Now lets execute the SQL ;-)
+            sqlite_cmd.CommandText = "CREATE TABLE IF NOT EXISTs test (id int primary key, text varchar(100));";
             sqlite_cmd.ExecuteNonQuery();
-            sqlite_cmd.CreateParameter();
+            Dictionary<int, string> TestData = new Dictionary<int, string>
+            {
+                { 1, "ett" }
+                ,{2, "två" }
+                , {3, "tre" }
+            };
+            foreach(KeyValuePair<int, string> k  in TestData)
+            {
+                sqlite_cmd.CommandText = "INSERT INTO test (id, text) VALUES(" + k.Key.ToString() + ", '" + k.Value +"'); ";
+                sqlite_cmd.ExecuteNonQuery();
+            }
+            // Now lets execute the SQL ;-)
+
+            sqlite_cmd.CommandText = "SELECT * FROM test";
+            SQLiteDataReader sqlite_datareader = sqlite_cmd.ExecuteReader();
+
+            // The SQLiteDataReader allows us to run through each row per loop
+            while (sqlite_datareader.Read()) // Read() returns true if there is still a result line to read
+            {
+                // Print out the content of the text field:
+                // System.Console.WriteLine("DEBUG Output: '" + sqlite_datareader["text"] + "'");
+
+                object idReader = sqlite_datareader.GetValue(0);
+                string textReader = sqlite_datareader.GetString(1);
+
+                OutTextBox.Text += idReader + " '" + textReader + "' " + "\n";
+            }
         }
     }
 }
