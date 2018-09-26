@@ -2,12 +2,14 @@ Learning targets:
 - Setting up an in app SQL
 - Making a good vmv
 - import textfile. Json or xml
+- Ability to choose language
 Bonus targets
 - Unit Testing.. atleast try.
 - Week planning
 - Changing interface after its done
 - Running on android
 - Share between devices
+- Users
 
 Functions
 StartScreen
@@ -31,3 +33,16 @@ views
 - Recipe edit
 - Ingridients show
 - Ingridients edit
+
+Tables
+-Recipes
+ID, text, bild?, DefaultNrOfPortions
+-AllTheIngredients
+RecipeID, IngredientType, Quantity
+-IngredientType
+Ingredient, unit
+-AssumedToHave
+Ingredient, user
+text
+TextID, language, text, unique
+Units

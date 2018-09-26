@@ -16,15 +16,14 @@ using System.Windows.Shapes;
 
 namespace Recepticator
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        Dictionary<int, string> TestData;
+        private readonly MainView _mainView;
+        List<Ingredient> TestData;
         public MainWindow()
         {
             InitializeComponent();
+            _mainView = DataContext as MainView;
             SQLiteConnection.CreateFile("Test1.sqlite");
             // create a new database connection:
             SQLiteConnection sqlite_conn = new SQLiteConnection("Data Source=Test1.sqlite;Version=3;");
@@ -34,24 +33,24 @@ namespace Recepticator
             SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
 
             // Let the SQLiteCommand object know our SQL-Query:
-            sqlite_cmd.CommandText = "CREATE TABLE IF NOT EXISTs test (id int primary key, text varchar(100));";
+            sqlite_cmd.CommandText = "CREATE TABLE IF NOT EXISTs testIngredient (IngredientType varchar(100) primary key, Unit varchar(100));";
             sqlite_cmd.ExecuteNonQuery();
-            TestData = new Dictionary<int, string>
+            TestData = new List<Ingredient>
             {
-                { 1, "ett" }
-                ,{2, "två" }
-                , {3, "tre" }
+                {new Ingredient("mjöl", "dl") },
+                {new Ingredient("smör", "g") },
+                {new Ingredient("ägg", "st") }
             };
-            foreach(KeyValuePair<int, string> k  in TestData)
+            foreach(Ingredient k  in TestData)
             {
-                sqlite_cmd.CommandText = "INSERT INTO test (id, text) VALUES(" + k.Key.ToString() + ", '" + k.Value +"'); ";
+                sqlite_cmd.CommandText = "INSERT INTO testIngredient (IngredientType, Unit) VALUES('" + k.Name + "', '" + k.Unit +"'); ";
                 sqlite_cmd.ExecuteNonQuery();
             }
             // Now lets execute the SQL ;-)
 
-            sqlite_cmd.CommandText = "SELECT * FROM test";
+            sqlite_cmd.CommandText = "SELECT * FROM testIngredient";
             SQLiteDataReader sqlite_datareader = sqlite_cmd.ExecuteReader();
-
+            List<Ingredient> FoundIngredients = new List<Ingredient>();
             // The SQLiteDataReader allows us to run through each row per loop
             while (sqlite_datareader.Read()) // Read() returns true if there is still a result line to read
             {
@@ -60,9 +59,11 @@ namespace Recepticator
 
                 object idReader = sqlite_datareader.GetValue(0);
                 string textReader = sqlite_datareader.GetString(1);
+                FoundIngredients.Add(new Ingredient(sqlite_datareader.GetString(0), sqlite_datareader.GetString(1)));
 
                 OutTextBox.Text += idReader + " '" + textReader + "' " + "\n";
             }
+            _mainView.OutputIngredient = FoundIngredients;
         }
 
         private void NewMockQuery(object sender, RoutedEventArgs e)
@@ -71,10 +72,10 @@ namespace Recepticator
             SQLiteConnection sqlite_conn = new SQLiteConnection("Data Source=Test1.sqlite;Version=3;");
             sqlite_conn.Open();
             SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
-            sqlite_cmd.CommandText = "INSERT INTO test (id, text) VALUES(" + i.ToString() + ", '" + i.ToString() + "'); ";
+            sqlite_cmd.CommandText = "INSERT INTO testIngredient (IngredientType, Unit) VALUES(" + i.ToString() + ", '" + i.ToString() + "'); ";
             sqlite_cmd.ExecuteNonQuery();
             OutTextBox.Text = "";
-            sqlite_cmd.CommandText = "SELECT * FROM test";
+            sqlite_cmd.CommandText = "SELECT * FROM testIngredient";
             SQLiteDataReader sqlite_datareader = sqlite_cmd.ExecuteReader();
             // The SQLiteDataReader allows us to run through each row per loop
             while (sqlite_datareader.Read()) // Read() returns true if there is still a result line to read
