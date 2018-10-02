@@ -36,13 +36,12 @@ views
 
 Tables
 -Recipes
-ID, text, bild?, DefaultNrOfPortions
+RecipeID, text, bild?, DefaultNrOfPortions
 -AllTheIngredients
-RecipeID, IngredientType, Quantity
--IngredientType
-Ingredient, unit
+RecipeID, Ingredient, Quantity
+-Ingredient
+Ingredient, Unit
 -AssumedToHave
 Ingredient, user
-text
-TextID, language, text, unique
-Units
+-Units
+Unit

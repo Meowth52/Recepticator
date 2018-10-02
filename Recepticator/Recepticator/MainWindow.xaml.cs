@@ -24,7 +24,10 @@ namespace Recepticator
         {
             InitializeComponent();
             _mainView = DataContext as MainView;
-            SQLiteConnection.CreateFile("Test1.sqlite");
+            if (!System.IO.File.Exists("Test1.sqlite"))
+            {
+                SQLiteConnection.CreateFile("Test1.sqlite");
+            }
             // create a new database connection:
             SQLiteConnection sqlite_conn = new SQLiteConnection("Data Source=Test1.sqlite;Version=3;");
 
@@ -32,7 +35,7 @@ namespace Recepticator
             sqlite_conn.Open();
             SQLiteCommand sqlite_cmd = sqlite_conn.CreateCommand();
 
-            // Let the SQLiteCommand object know our SQL-Query:
+            // Set up tables
             sqlite_cmd.CommandText = "CREATE TABLE IF NOT EXISTs Ingredient (IngredientType varchar(100) primary key, Unit varchar(100));";
             sqlite_cmd.ExecuteNonQuery();
             TestData = new List<Ingredient>
@@ -43,7 +46,7 @@ namespace Recepticator
             };
             foreach(Ingredient k  in TestData)
             {
-                sqlite_cmd.CommandText = "INSERT INTO Ingredient (IngredientType, Unit) VALUES('" + k.Name + "', '" + k.Unit +"'); ";
+                sqlite_cmd.CommandText = "INSERT INTO Ingredient (IngredientType, Unit) VALUES('" + k.Name + "', '" + k.Unit + "' WHERE NOT IngredientType = " + k.Name + "); "; // fix :.|
                 sqlite_cmd.ExecuteNonQuery();
             }
             // Now lets execute the SQL ;-)
