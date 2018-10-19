@@ -23,7 +23,7 @@ namespace Recepticator
         }
         public string getInsert()
         {
-            return "INSERT INTO Ingredients (Ingredient, Unit) VALUES(" + Name + ", '" + Unit + "');";
+            return "INSERT INTO Ingredients (Ingredient, Unit) VALUES('" + Name + "', '" + Unit + "');";
         }
     }
 }

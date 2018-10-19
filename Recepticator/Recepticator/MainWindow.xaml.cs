@@ -30,11 +30,11 @@ namespace Recepticator
                 SQLiteConnection.CreateFile("Test1.sqlite");
             }
             // create a new database connection:
-            SQLiteConnection sqlite_conn = new SQLiteConnection("Data Source=Test1.sqlite;Version=3;");
+            SQLiteConnection SqlConnectionn = new SQLiteConnection("Data Source=Test1.sqlite;Version=3;");
 
             // open the connection:
-            sqlite_conn.Open();
-            SQLiteCommand Command = sqlite_conn.CreateCommand();
+            SqlConnectionn.Open();
+            SQLiteCommand Command = SqlConnectionn.CreateCommand();
 
             // Set up tables
             Tables = new Dictionary<string, Table>
@@ -87,26 +87,29 @@ namespace Recepticator
 
         private void NewMockQuery(object sender, RoutedEventArgs e)
         {
+            AttributeInput.Children.Add(new TextBox());
+            AttributeInput.Children.Add(new TextBox());
+            OutTextBox.Text = "";
+        }
+
+        private void SubmittPress(object sender, RoutedEventArgs e)
+        {
+            SQLiteConnection SqlConnection = new SQLiteConnection("Data Source=Test1.sqlite;Version=3;");
+            SqlConnection.Open();
+            SQLiteCommand Query = SqlConnection.CreateCommand();
             List<Ingredient> FoundIngredients = new List<Ingredient>();
-            int i = TestData.Count+1;
-            Ingredient NewIngredient = new Ingredient(i.ToString(), i.ToString());
-            TestData.Add(NewIngredient);
-            SQLiteConnection sqlite_conn = new SQLiteConnection("Data Source=Test1.sqlite;Version=3;");
-            sqlite_conn.Open();
-            SQLiteCommand Query = sqlite_conn.CreateCommand();
+            TextBox Attribute0 = (TextBox)AttributeInput.Children[0];
+            TextBox Attribute1 = (TextBox)AttributeInput.Children[1];
+            Ingredient NewIngredient = new Ingredient(Attribute0.Text, Attribute1.Text);
             Query.CommandText = NewIngredient.getInsert();
             Query.ExecuteNonQuery();
-            OutTextBox.Text = "";
             Query.CommandText = Tables["Ingredients"].getSelectAll();
             SQLiteDataReader Reader = Query.ExecuteReader();
-            
-            // The SQLiteDataReader allows us to run through each row per loop
             while (Reader.Read()) // Read() returns true if there is still a result line to read
             {
                 FoundIngredients.Add(new Ingredient(Reader));
             }
             _mainView.OutputIngredient = FoundIngredients;
         }
-        
     }
 }
