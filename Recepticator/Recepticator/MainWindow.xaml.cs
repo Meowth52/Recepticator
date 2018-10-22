@@ -39,33 +39,14 @@ namespace Recepticator
             // Set up tables
             Tables = new Dictionary<string, Table>
             {
-                { "Ingredients",new Table("Ingredients", new Dictionary<string, string>{ { "Ingredient", "Ingredient varchar(100) primary key" }, { "Unit", "Unit varchar(100)" } }) }
+                { "Ingredients",new Table("Ingredients", new List<Column>{ new Column("Ingredient", "varchar(100)", true), new Column("Unit", "varchar(100)", "Units") }) },
+                { "Units",new Table("Units", new List<Column>{ new Column("Unit", "varchar(100)", true) }) }
             };
             foreach (KeyValuePair<string, Table> t in Tables)
             {
                 Command.CommandText = t.Value.getCreateCommand();
                 Command.ExecuteNonQuery();
             }
-            //TestData = new List<Ingredient>
-            //{
-            //    {new Ingredient("mjöl", "dl") },
-            //    {new Ingredient("smör", "g") },
-            //    {new Ingredient("ägg", "st") }
-            //};
-            //foreach(Ingredient k  in TestData)
-            //{
-            //    Command.CommandText = "SELECT * FROM Ingredients WHERE Ingredient = '" + k.Name + "';";
-            //    SQLiteDataReader Reader = Command.ExecuteReader();
-            //    if (!Reader.HasRows)
-            //    {
-            //        Reader.Close();
-            //        Command.CommandText = "INSERT INTO Ingredients (Ingredient, Unit) VALUES('" + k.Name + "', '" + k.Unit + "' ); "; // fix :.|
-            //        Command.ExecuteNonQuery();
-            //    }
-            //    else
-            //        Reader.Close();
-            //}
-            // Now lets execute the SQL ;-)
 
             Command.CommandText = "SELECT * FROM Ingredients";
             SQLiteDataReader sqlite_datareader = Command.ExecuteReader();
@@ -87,9 +68,12 @@ namespace Recepticator
 
         private void NewMockQuery(object sender, RoutedEventArgs e)
         {
+            // Ha Table att returnera en lista med column och column att returnera "new TextBox()" eller motsvarande
+
             AttributeInput.Children.Add(new TextBox());
             AttributeInput.Children.Add(new TextBox());
             OutTextBox.Text = "";
+            
         }
 
         private void SubmittPress(object sender, RoutedEventArgs e)

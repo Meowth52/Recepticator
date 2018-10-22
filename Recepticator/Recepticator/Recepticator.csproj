@@ -82,7 +82,6 @@
     </Compile>
     <Compile Include="Column.cs" />
     <Compile Include="Ingredient.cs" />
-    <Compile Include="IngredientTable.cs" />
     <Compile Include="Table.cs" />
     <Compile Include="MainView.cs" />
     <Compile Include="MainWindow.xaml.cs">

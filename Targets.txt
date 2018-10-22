@@ -45,3 +45,11 @@ Ingredient, Unit
 Ingredient, user
 -Units
 Unit
+-User
+
+FieldTypes
+Varchar(100) eller kortare
+Längre text
+Real
+Bool
+Databasreferens

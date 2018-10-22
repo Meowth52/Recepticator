@@ -9,19 +9,19 @@ namespace Recepticator
     class Table
     {
         public string Name { get; }
-        Dictionary<string, string> Columns;
-        public Table(string name, Dictionary<String, string> columns)
+        List<Column> Columns;
+        public Table(string name, List<Column> columns)
         {
             Name = name;
-            Columns = new Dictionary<string, string>(columns);
+            Columns = new List<Column>(columns);
         }
         public string getCreateCommand()
         {
             StringBuilder Building = new StringBuilder();
             Building.Append("CREATE TABLE IF NOT EXISTS " + Name + " (");
-            foreach(KeyValuePair<string, string> k in Columns)
+            foreach(Column c in Columns)
             {
-                Building.Append(k.Value + ", ");
+                Building.Append(c.getInitiationString() + ", ");
             }
             Building.Remove(Building.Length-2,2);
             Building.Append(");");
@@ -30,6 +30,10 @@ namespace Recepticator
         public string getSelectAll()
         {
             return "SELECT * FROM " + Name;
+        }
+        public List<Column> getColumns()
+        {
+            return new List<Column>(Columns);
         }
     }
 }
